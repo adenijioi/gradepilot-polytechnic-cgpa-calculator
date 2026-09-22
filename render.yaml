@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: polytechnic-cgpa-calculator
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: {name: cgpa-calculator-db, property: connectionString}
+      - key: SECRET_KEY
+        generateValue: true
+databases:
+  - name: cgpa-calculator-db
+    plan: free
+    databaseName: cgpa_calculator
+    user: cgpa_user
